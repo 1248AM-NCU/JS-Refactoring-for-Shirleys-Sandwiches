@@ -25,15 +25,17 @@ const cart = {
         const sandwichCard = document.createElement('div');
         sandwichCard.className = cart.selectedSandwich.id === sandwich.id ? 'm-3 card border-primary' : 'm-3 card'
         sandwichCard.style.cursor = 'pointer';
-        sandwichCard.innerHTML = `
-        <div class="card-body">
-            <h5 class="card-title">${sandwich.id}. ${sandwich.name}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">${sandwich.bread}</h6>
-            <p class="card-text">${sandwich.ingredients.join(', ')}</p>
-            <button class="btn btn-secondary duplicate-button">Duplicate</button>
-            <button class="btn btn-danger delete-button">Delete</button>
-        </div>
-    `
+        const { id, name, bread, ingredients } = sandwich;
+sandwichCard.innerHTML = `
+    <div class="card-body">
+        <h5 class="card-title">${id}. ${name}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">${bread}</h6>
+        <p class="card-text">${ingredients.join(', ')}</p>
+        <button class="btn btn-secondary duplicate-button">Duplicate</button>
+        <button class="btn btn-danger delete-button">Delete</button>
+    </div>
+`
+
 
         // When a sandwich card is clicked, select it.
         sandwichCard.addEventListener('click', () => {
@@ -85,11 +87,7 @@ const cart = {
 
     // Runs when the user clicks 'Duplicate' on a sandwich card
     async duplicateSandwich(sandwich) {
-        let newSandwich = {
-            name: sandwich.name,
-            bread: sandwich.bread,
-            ingredients: sandwich.ingredients
-        }
+        let newSandwich = { ...sandwich }
 
         // Save the sandwich on the server
         let response = await fetch(`http://localhost:3001/cart`, {
